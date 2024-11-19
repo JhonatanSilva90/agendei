@@ -2,7 +2,9 @@ import { View, Text, Image } from "react-native";
 import { styles } from "./appointments.style.js";
 import icon from "../../constants/icon.js";
 import Button from "../button/button.jsx";
+
 function Appointment(props) {
+  const dt = new Date(props.bookingDate + "T" + props.bookingHour);
   return (
     <View style={styles.appointment}>
       <Text style={styles.name}>
@@ -14,15 +16,19 @@ function Appointment(props) {
         <View style={styles.containerBooking}>
           <View style={styles.booking}>
             <Image style={styles.icon} source={icon.calendar} />
-            <Text style={styles.bookingDate}>15/10/2024</Text>
+            <Text style={styles.bookingDate}>{dt.toLocaleDateString()}</Text>
           </View>
           <View style={styles.booking}>
             <Image style={styles.icon} source={icon.clock} />
-            <Text style={styles.bookingHour}>08:30h</Text>
+            <Text style={styles.bookingHour}>{props.bookingHour}h</Text>
           </View>
         </View>
         <View style={styles.containerButton}>
-          <Button text="Cancelar Reserva" theme="danger" />
+          <Button
+            text="Cancelar Reserva"
+            theme="danger"
+            onPress={() => props.onPress(props.id_appointment)}
+          />
         </View>
       </View>
     </View>

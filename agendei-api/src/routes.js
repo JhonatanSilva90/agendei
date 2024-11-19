@@ -32,5 +32,10 @@ router.get(
   controllerAppointment.ListarByUser
 );
 router.post("/appointments", jwt.ValidateToken, controllerAppointment.Inserir);
+router.delete(
+  "/appointments/:id_appointment",
+  jwt.ValidateToken,
+  controllerAppointment.Excluir
+);
 
 export default router;
