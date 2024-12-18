@@ -5,3 +5,18 @@ body {
   font-family: "Poppins";
   overflow-x: hidden;
 }
+
+.mt-page {
+  margin-top: 90px;
+}
+
+select {
+  border: 0px;
+  background-color: #fff;
+  cursor: pointer;
+  width: 100%;
+  padding: 0; /* Remove qualquer espaçamento interno */
+  appearance: none; /* Remove o estilo padrão do navegador */
+  -webkit-appearance: none; /* Remove o estilo no WebKit (Safari/Chrome) */
+  -moz-appearance: none;
+}
