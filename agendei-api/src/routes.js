@@ -38,4 +38,13 @@ router.delete(
   controllerAppointment.Excluir
 );
 
+// Rotas do Admin
+router.post("/admin/register", controllerUser.InserirAdmin);
+router.post("/admin/login", controllerUser.LoginAdmin);
+router.get(
+  "/admin//appointments",
+  jwt.ValidateToken,
+  controllerAppointment.Listar
+);
+
 export default router;

@@ -2,11 +2,41 @@ import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
 import logo from "../../assets/logo.png";
 import fundo from "../../assets/fundo.png";
+import { useState } from "react";
+import api from "../../constants/api";
 
 function Login() {
   const navigate = useNavigate();
-  function ExecuteLogin() {
-    navigate("/appointments");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState("");
+
+  async function ExecuteLogin() {
+    setMsg("");
+
+    try {
+      const response = await api.post("/admin/login", {
+        email,
+        password,
+      });
+
+      if (response.data) {
+        localStorage.setItem("sessionToken", response.data.token);
+        localStorage.setItem("sessionId", response.data.id_admin);
+        localStorage.setItem("sessionEmail", response.data.email);
+        localStorage.setItem("sessionName", response.data.name);
+        api.defaults.headers.common["Authorization"] =
+          "Bearer" + response.data.token;
+        navigate("/appointments");
+      } else {
+        setMsg("Erro ao efetuar login. Tente novamente mais tarde.");
+      }
+    } catch (error) {
+      if (error.response?.data.error) setMsg(error.response?.data.error);
+      else setMsg("Erro ao efetuar login. Tente novamente mais tarde.");
+      // console.log(error);
+    }
   }
   return (
     <div className="row">
@@ -19,13 +49,19 @@ function Login() {
           <h5 className="mb-4 text-secondary">Acesse sua conta</h5>
 
           <div className="mt-4">
-            <input type="email" placeholder="Email" className="form-control" />
+            <input
+              type="email"
+              placeholder="Email"
+              className="form-control"
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="mt-2">
             <input
               type="password"
               placeholder="Senha"
               className="form-control"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="mt-2 mb-5">
@@ -37,6 +73,13 @@ function Login() {
               Login
             </button>
           </div>
+
+          {msg.length > 0 && (
+            <div className="alert alert-danger" role="alert">
+              {msg}
+            </div>
+          )}
+
           <div>
             <span className="me-1">Não tenho uma conta.</span>
             <Link to="/register">Criar agora!</Link>
